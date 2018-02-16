@@ -1,0 +1,39 @@
+#!/usr/bin/php
+<?php
+# get device path
+$raw = shell_exec( '/usr/local/bin/hid-query -e' );
+preg_match_all( '|(.*?01) : 413d:2107.*|', $raw, $matches ); # you might also try (.*?00)
+$path = $matches[1][0];
+
+# get raw data (returns something like "80 40 0a df 0a 6d 00 00")
+$raw = exec( "/usr/local/bin/hid-query $path 0x01 0x80 0x33 0x01 0x00 0x00 0x00 0x00" );
+preg_match_all( '|\w+|', $raw, $bytes );
+
+$tmp_hb = hexdec( $bytes[0][2] );
+$tmp_lb = hexdec( $bytes[0][3] );
+$tmpraw = ( $tmp_hb << 8 ) + $tmp_lb;
+$tmp = $tmpraw / 100;
+
+$hum_hb = hexdec( $bytes[0][4] );
+$hum_lb = hexdec( $bytes[0][5] );
+$hum = ( ( $hum_hb << 8 ) + $hum_lb ) / 100;
+
+if ( !empty( $argv[1] ) ) {
+	switch ( $argv[1] ) {
+		case "config": 
+			echo "graph_info This graph shows temperature and humidity as ";
+			echo "measured by the TEMPerX USB dongle\n";
+			echo "graph_title TEMPerX Temperature & Humidity\n";
+			echo "graph_vlabel Values\n";
+			echo "graph_category sensors\n";
+			echo "y1.label Humidity (%)\n";
+			echo "y1.draw LINE2\n";
+			echo "y2.label Temperature (C)\n";
+			echo "y2.draw LINE2\n";
+			if ( !getenv( 'MUNIN_CAP_DIRTYCONFIG' ) ) exit( 0 );
+			break;
+	}
+}
+
+echo "y1.value $hum\n";
+echo "y2.value $tmp\n";
