@@ -4,7 +4,7 @@ Munin plugin that monitors temperature and humidity as measured by the TEMPerHUM
 
 ## Info ##
 
-This will only work for devices with ID 413d:2107. Mine identifies itself by "TEMPerX_V3.1".
+This will only work for devices with ID 413d:2107. Mine identifies itself as "TEMPerX_V3.1".
 
 ## Prerequesites ##
 
@@ -17,6 +17,7 @@ Make sure the binary uses libusb not hidraw. On Ubuntu 16.04 I did the following
 -       find_library(HIDAPI_LIB NAMES hidapi-hidraw hidapi-libusb
 +       find_library(HIDAPI_LIB NAMES hidapi-libusb
 ```
+* continue with compilation
 
 ## Install
 
@@ -36,4 +37,14 @@ no screenshot yet
 
 ## Troubleshooting
 
-
+My dongle reports two USB paths:
+```
+$ hid-query -e
+0002:0002:00 : 413d:2107 interface 0 : (null) (null)
+0002:0002:01 : 413d:2107 interface 1 : (null) (null)
+```
+I had to use the path ending with "01". To try the "00" path, change the regex in temperx like this:
+```
+-       preg_match_all( '|(.*?01) : 413d:2107.*|', $raw, $matches );
++       preg_match_all( '|(.*?00) : 413d:2107.*|', $raw, $matches );
+```
