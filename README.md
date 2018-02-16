@@ -33,7 +33,7 @@ user root
 
 ## Example
 
-no screenshot yet
+![Munin Example](https://github.com/mreymann/temperx/blob/master/example.png)
 
 ## Troubleshooting
 
