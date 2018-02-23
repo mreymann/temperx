@@ -11,7 +11,7 @@ preg_match_all( '|\w+|', $raw, $bytes );
 
 $tmp_hb = hexdec( $bytes[0][2] );
 $tmp_lb = hexdec( $bytes[0][3] );
-$tmp = ( ( $tmp_hb << 8 ) + $tmp_lb ) /100;
+$tmp = ( ( $tmp_hb << 8 ) + $tmp_lb ) / 100;
 
 $hum_hb = hexdec( $bytes[0][4] );
 $hum_lb = hexdec( $bytes[0][5] );
