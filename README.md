@@ -1,12 +1,13 @@
-# temperx :bar_chart:
+# temperx/temperx.go :bar_chart:
 
-Munin plugin that monitors temperature and humidity as measured by the TEMPerHUM/TEMPerX USB dongle (413d:2107)
+* temperx: Munin plugin written in PHP that monitors temperature and humidity
+* temperx.go: Standalone tool written in Go that reports current temperature and humidity
 
-## Info ##
+These tools will only work for TEMPerHUM/TEMPerX USB devices with ID 413d:2107. Mine identifies itself as "TEMPerX_V3.1".
 
-This will only work for devices with ID 413d:2107. Mine identifies itself as "TEMPerX_V3.1".
+## temperx
 
-## Prerequesites ##
+### Prerequesites
 
 This plugin relies entirely on the hid-query binary provided by https://github.com/edorfaus/TEMPered .
 Make sure the binary uses libusb not hidraw. On Ubuntu 16.04 I did the following:
@@ -19,7 +20,7 @@ Make sure the binary uses libusb not hidraw. On Ubuntu 16.04 I did the following
 ```
 * continue with compilation
 
-## Install
+### Install
 
 * install php-cli
 * copy the hid-query binary to /usr/local/bin/
@@ -31,11 +32,11 @@ user root
 ```
 * restart munin-node
 
-## Example
+### Example
 
 ![Munin Example](https://github.com/mreymann/temperx/blob/master/example.png)
 
-## Troubleshooting
+### Troubleshooting
 
 My dongle reports two USB paths:
 ```
@@ -48,3 +49,7 @@ I had to use the path ending with "01". To try the "00" path, change the regex i
 -       preg_match_all( '|(.*?01) : 413d:2107.*|', $raw, $matches );
 +       preg_match_all( '|(.*?00) : 413d:2107.*|', $raw, $matches );
 ```
+
+## temperx.go
+
+... more to come
