@@ -52,4 +52,17 @@ I had to use the path ending with "01". To try the "00" path, change the regex i
 
 ## temperx.go
 
-... more to come
+### Installation
+
+```
+$ go get github.com/mreymann/temperx
+$ go install github.com/mreymann/temperx
+```
+Should produce the temperx binary in $GOPATH/bin/
+
+### Example
+
+```
+$ /root/go/bin/temperx
+Temperature: 23.33, Humidity: 40.6
+```
