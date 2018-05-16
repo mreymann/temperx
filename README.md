@@ -29,6 +29,11 @@ Make sure the binary uses libusb not hidraw. On Ubuntu 16.04 I did the following
 ```
 [temperx]
 user root
+# optional calibration parameters:
+env.t_offset 0
+env.t_factor 1
+env.h_offset 0
+env.h_factor 1
 ```
 * restart munin-node
 

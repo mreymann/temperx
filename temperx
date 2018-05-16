@@ -9,13 +9,19 @@ $path = $matches[1][0];
 $raw = exec( "/usr/local/bin/hid-query $path 0x01 0x80 0x33 0x01 0x00 0x00 0x00 0x00" );
 preg_match_all( '|\w+|', $raw, $bytes );
 
+# get offsets & factors
+$t_offset = getenv( 't_offset' )? getenv( 't_offset' ) : 0;
+$t_factor = getenv( 't_factor' )? getenv( 't_factor' ) : 1;
+$h_offset = getenv( 'h_offset' )? getenv( 'h_offset' ) : 0;
+$h_factor = getenv( 'h_factor' )? getenv( 'h_factor' ) : 1;
+
 $tmp_hb = hexdec( $bytes[0][2] );
 $tmp_lb = hexdec( $bytes[0][3] );
-$tmp = ( ( $tmp_hb << 8 ) + $tmp_lb ) / 100;
+$tmp = ( ( $tmp_hb << 8 ) + $tmp_lb ) / 100 * $t_factor + $t_offset;
 
 $hum_hb = hexdec( $bytes[0][4] );
 $hum_lb = hexdec( $bytes[0][5] );
-$hum = ( ( $hum_hb << 8 ) + $hum_lb ) / 100;
+$hum = ( ( $hum_hb << 8 ) + $hum_lb ) / 100 * $h_factor + $h_offset;
 
 if ( !empty( $argv[1] ) ) {
 	switch ( $argv[1] ) {
