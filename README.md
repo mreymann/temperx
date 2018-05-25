@@ -71,3 +71,31 @@ Should produce the temperx binary in $GOPATH/bin/
 $ /root/go/bin/temperx
 Temperature: 23.33, Humidity: 40.6
 ```
+
+### Options
+
+```
+$ /root/go/bin/temperx -h
+Show temperature and humidity as measured by TEMPerHUM/TEMPerX USB devices (ID 413d:2107)
+
+Usage:
+  temperx [flags]
+
+Flags:
+  -c, --conf string   Configuration file (default "/root/.temperx.toml")
+  -h, --help          help for temperx
+      --hf float      Factor for humidity (default 1)
+      --ho float      Offset for humidity
+      --tf float      Factor for temperature (default 1)
+      --to float      Offset for temperature
+  -v, --verbose       Verbose output
+```
+
+### Configuration file
+
+```
+$ cat /root/.temperx.toml
+# Example: Celsius -> Fahrenheit
+tf = 1.8
+to = 32
+```
