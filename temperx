@@ -1,5 +1,22 @@
 #!/usr/bin/php
 <?php
+if ( !empty( $argv[1] ) ) {
+	switch ( $argv[1] ) {
+		case "config": 
+			echo "graph_info This graph shows temperature and humidity as ";
+			echo "measured by the TEMPerX USB dongle\n";
+			echo "graph_title TEMPerX Temperature & Humidity\n";
+			echo "graph_vlabel Values\n";
+			echo "graph_category sensors\n";
+			echo "y1.label Humidity (%)\n";
+			echo "y1.draw LINE2\n";
+			echo "y2.label Temperature (C)\n";
+			echo "y2.draw LINE2\n";
+			if ( !getenv( 'MUNIN_CAP_DIRTYCONFIG' ) ) exit( 0 );
+			break;
+	}
+}
+
 # get device path
 $raw = shell_exec( '/usr/local/bin/hid-query -e' );
 preg_match_all( '|(.*?01) : 413d:2107.*|', $raw, $matches ); # you might also try (.*?00)
@@ -22,23 +39,6 @@ $tmp = ( ( $tmp_hb << 8 ) + $tmp_lb ) / 100 * $t_factor + $t_offset;
 $hum_hb = hexdec( $bytes[0][4] );
 $hum_lb = hexdec( $bytes[0][5] );
 $hum = ( ( $hum_hb << 8 ) + $hum_lb ) / 100 * $h_factor + $h_offset;
-
-if ( !empty( $argv[1] ) ) {
-	switch ( $argv[1] ) {
-		case "config": 
-			echo "graph_info This graph shows temperature and humidity as ";
-			echo "measured by the TEMPerX USB dongle\n";
-			echo "graph_title TEMPerX Temperature & Humidity\n";
-			echo "graph_vlabel Values\n";
-			echo "graph_category sensors\n";
-			echo "y1.label Humidity (%)\n";
-			echo "y1.draw LINE2\n";
-			echo "y2.label Temperature (C)\n";
-			echo "y2.draw LINE2\n";
-			if ( !getenv( 'MUNIN_CAP_DIRTYCONFIG' ) ) exit( 0 );
-			break;
-	}
-}
 
 echo "y1.value $hum\n";
 echo "y2.value $tmp\n";
